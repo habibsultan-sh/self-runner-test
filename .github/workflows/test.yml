@@ -1,0 +1,26 @@
+name: Self Hosted Runner Test
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Show System Information
+        run: |
+          echo "Runner is working!"
+          hostname
+          whoami
+          pwd
+          uname -a
+
+      - name: List Files
+        run: ls -la
+
+      - name: Display File Content
+        run: cat index.txt
