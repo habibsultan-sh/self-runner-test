@@ -1,4 +1,3 @@
-```
 name: Self Hosted Runner Test # Workflow name
 
 on:
@@ -35,8 +34,9 @@ jobs:
           uname -a
 
       - name: List Files
-        run: ls -la
+        run: |
+          ls -la
 
       - name: Display File Content
-        run: cat index.txt
-```
+        run: |
+          cat index.txt
