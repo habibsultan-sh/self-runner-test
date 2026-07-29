@@ -1,11 +1,26 @@
-name: Self Hosted Runner Test
+```
+name: Self Hosted Runner Test # Workflow name
 
 on:
   push:
 
 jobs:
-  test:
-    runs-on: self-hosted
+  ci: # CI Stage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Repository
+        run: |
+          echo "Running CI..."
+          ls -la
+          cat index.txt
+
+  deploy: # CD Stage
+    needs: ci
+    runs-on: habib-runner
 
     steps:
       - name: Checkout Repository
@@ -24,3 +39,4 @@ jobs:
 
       - name: Display File Content
         run: cat index.txt
+```
