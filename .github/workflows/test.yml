@@ -1,42 +1,25 @@
-name: Self Hosted Runner Test # Workflow name
+name: Portfolio Deployment
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
-  ci: # CI Stage
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Verify Repository
-        run: |
-          echo "Running CI..."
-          ls -la
-          cat index.txt
-
-  deploy: # CD Stage
-    needs: ci
+  deploy:
     runs-on: habib-runner
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Show System Information
+      - name: Copy Files
         run: |
-          echo "Runner is working!"
-          hostname
-          whoami
-          pwd
-          uname -a
+          sudo rsync -av --delete \
+          --exclude=".git" \
+          --exclude=".github" \
+          $GITHUB_WORKSPACE/ \
+          /var/www/html/
 
-      - name: List Files
+      - name: Restart Apache
         run: |
-          ls -la
-
-      - name: Display File Content
-        run: |
-          cat index.txt
+          sudo systemctl restart apache2
