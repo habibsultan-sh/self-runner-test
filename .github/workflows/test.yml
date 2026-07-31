@@ -1,25 +1,36 @@
-name: Portfolio Deployment
+name: portfolio # Workflow name
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
-  deploy:
+  ci: # CI Stage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Repository
+        run: |
+          echo "Running CI..."
+
+  deploy: # CD Stage
+    needs: ci
     runs-on: habib-runner
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Copy Files
+      - name: Show System Information
         run: |
-          sudo rsync -av --delete \
-          --exclude=".git" \
-          --exclude=".github" \
-          $GITHUB_WORKSPACE/ \
-          /var/www/html/
+          echo "Runner is working!"
+          hostname
+          whoami
+          pwd
+          uname -a
 
-      - name: Restart Apache
+      - name: List Files
         run: |
-          sudo systemctl restart apache2
+          ls -la
